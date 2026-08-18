@@ -1,0 +1,41 @@
+services:
+  # ── MySQL Database ──────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: presensi-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-db_test}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── FastAPI Application ─────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: presensi-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Override DB_HOST to point to the 'db' service inside Docker network
+      DB_HOST: db
+    ports:
+      - "${BE_PORT:-3000}:3000"
+    volumes:
+      - ./uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

@@ -1,0 +1,5 @@
+.env
+.venv
+
+whatsapp_session.sqlite3
+your_database_file.sqlite3

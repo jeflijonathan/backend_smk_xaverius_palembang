@@ -51,6 +51,15 @@ This project uses **pipreqs** to manage and update the `requirements.txt` file.
 
 Unlike the default `pip freeze` command, which lists all packages in the virtual environment (including library dependencies from accidentally installed tools), **pipreqs** intelligently looks only at the `import` keywords actually written in your Python code.
 
+### 🛠️ Cara Update `requirements.txt`
+
+Jalankan perintah ini di terminal untuk memperbarui daftar library yang dipakai:
+
+```bash
+pip install pipreqs
+pipreqs . --force
+```
+
 ### 📊 Comparison: `pip freeze` vs `pipreqs`
 
 | Features           | `pip freeze`                       | `pipreqs` (This Project)                   |

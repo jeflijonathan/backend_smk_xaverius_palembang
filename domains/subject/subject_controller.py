@@ -21,6 +21,21 @@ class SubjectController(BaseController, prefix="/subjects", tags=["Subjects"]):
             except Exception as error:
                 cls.handle_error(detail=str(error))
 
+        @cls.router.get("/{id}", status_code=status.HTTP_200_OK)
+        def get_subject(id: str, db: Session = Depends(get_db)):
+            try:
+                subject = cls._service.get_subject_by_id(db, id)
+                if not subject:
+                    cls.handle_error(
+                        detail=f"Subject with id {id} not found",
+                        status_code=status.HTTP_404_NOT_FOUND,
+                    )
+                return cls.handle_success(
+                    data=subject, message="Subject retrieved successfully"
+                )
+            except Exception as error:
+                cls.handle_error(detail=str(error))
+
         @cls.router.post("/", status_code=status.HTTP_201_CREATED)
         def create_subject(data: SchoolSubjectCreate, db: Session = Depends(get_db)):
             try:

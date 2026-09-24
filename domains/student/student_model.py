@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from config.database.db import Base
 from common.consts.timestamps import Timestamps
 from domains.auth.associations import student_roles_association
+from domains.parent.parent_model import student_parent_association
 
 
 def generate_uuid():
@@ -52,6 +53,12 @@ class StudentModel(Base, Timestamps):
         "RoleModel", secondary=student_roles_association, back_populates="students"
     )
     user = relationship("UserStudentModel", back_populates="profile")
+    
+    parents = relationship(
+        "ParentModel",
+        secondary=student_parent_association,
+        back_populates="students"
+    )
     # classroom = relationship("ClassRoomModel", back_populates="StudentModel")
     # posts = relationship(
     #     "StudentPostModel", back_populates="student", cascade="all, delete-orphan"

@@ -1,6 +1,5 @@
 fastapi==0.141.1
 fastapi_mail==1.6.5
-neonize==0.4.3.post0
 opencv_contrib_python==4.13.0.92
 opencv_python==4.13.0.92
 openpyxl==3.1.5
@@ -9,8 +8,8 @@ Pillow==12.3.0
 pydantic==2.13.4
 pypdf==6.16.1
 python_docx==1.2.0
-qrcode==8.2
-segno==1.6.6
 slowapi==0.1.10
 SQLAlchemy==2.0.52
 uvicorn==0.52.3
+pymysql==1.2.3
+python-multipart==0.0.32

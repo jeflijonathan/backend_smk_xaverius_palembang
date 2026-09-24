@@ -17,18 +17,18 @@ class BaseMySQLService(Generic[ModelType]):
             db.commit()
             db.refresh(db_obj)
             return db_obj
-        except Exception as error:
+        except Exception:
             db.rollback()
-            raise error
+            raise
 
     def find(
         self,
         db: Session,
         filter_data: Optional[Dict[str, Any]] = None,
-        paginator: Optional[Dict[str, int]] = None,
+        paginator: Optional[Dict[str, Any]] = None,
     ) -> List[ModelType]:
         try:
-            filter_data = filter_data or {"query": {}, "sorter": None}
+            filter_data = filter_data or {}
             query_dict = filter_data.get("query", {})
             sorter = filter_data.get("sorter", None)
 
@@ -36,7 +36,7 @@ class BaseMySQLService(Generic[ModelType]):
 
             if query_dict:
                 for key, value in query_dict.items():
-                    if hasattr(self.model, key):
+                    if hasattr(self.model, key) and value is not None:
                         stmt = stmt.where(getattr(self.model, key) == value)
 
             if sorter and "sort" in sorter and "order" in sorter:
@@ -47,30 +47,35 @@ class BaseMySQLService(Generic[ModelType]):
                     else:
                         stmt = stmt.order_by(column.asc())
 
-            if paginator and "limit" in paginator and "page" in paginator:
-                limit = paginator["limit"]
-                offset = limit * (paginator["page"] - 1)
-                stmt = stmt.limit(limit).offset(offset)
+            if paginator:
+                page = int(paginator.get("page", 1))
+                limit = paginator.get("limit")
+
+                if limit is not None and int(limit) > 0:
+                    limit = int(limit)
+                    offset = (page - 1) * limit
+                    # Urutan yang benar: offset dulu baru limit
+                    stmt = stmt.offset(offset).limit(limit)
 
             return list(db.scalars(stmt).all())
-        except Exception as error:
-            raise error
+        except Exception:
+            raise
 
     def count(self, db: Session, filter_data: Optional[Dict[str, Any]] = None) -> int:
         try:
-            filter_data = filter_data or {"query": {}}
+            filter_data = filter_data or {}
             query_dict = filter_data.get("query", {})
 
             stmt = select(func.count()).select_from(self.model)
 
             if query_dict:
                 for key, value in query_dict.items():
-                    if hasattr(self.model, key):
+                    if hasattr(self.model, key) and value is not None:
                         stmt = stmt.where(getattr(self.model, key) == value)
 
             return db.scalar(stmt) or 0
-        except Exception as error:
-            raise error
+        except Exception:
+            raise
 
     def find_one(
         self, db: Session, filter_data: Optional[Dict[str, Any]] = None
@@ -84,18 +89,17 @@ class BaseMySQLService(Generic[ModelType]):
                     stmt = stmt.where(getattr(self.model, key) == value)
 
             return db.scalars(stmt).first()
-        except Exception as error:
-            raise error
+        except Exception:
+            raise
 
     def update(
-        self, db: Session, filter_data: Any, update_data: Dict[str, Any]
+        self, db: Session, filter_data: Dict[str, Any], update_data: Dict[str, Any]
     ) -> Optional[ModelType]:
         try:
-            where_dict = (
-                filter_data if isinstance(filter_data, dict) else {"id": filter_data}
-            )
+            if not isinstance(filter_data, dict):
+                raise ValueError("filter_data harus berupa dictionary, contoh: {'id_category_subject': id}")
 
-            record = self.find_one(db, where_dict)
+            record = self.find_one(db, filter_data)
             if not record:
                 return None
 
@@ -106,12 +110,12 @@ class BaseMySQLService(Generic[ModelType]):
             db.commit()
             db.refresh(record)
             return record
-        except Exception as error:
+        except Exception:
             db.rollback()
-            raise error
+            raise
 
     def delete(
-        self, db: Session, filter_data: Dict[str, Any] = None
+        self, db: Session, filter_data: Optional[Dict[str, Any]] = None
     ) -> Optional[ModelType]:
         try:
             filter_data = filter_data or {}
@@ -123,6 +127,6 @@ class BaseMySQLService(Generic[ModelType]):
                 return record
 
             return None
-        except Exception as error:
+        except Exception:
             db.rollback()
-            raise error
+            raise

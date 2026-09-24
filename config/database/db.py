@@ -33,5 +33,11 @@ import domains.employee.employee_model
 import domains.users.user_model
 import domains.uploadFile.upload_file_model
 import domains.categorySubject.category_subject_model
+import domains.major.major_model
 import domains.subject.subject_model
-
+import domains.effectiveWeek.effective_week_model
+import domains.teacherSubject.teacher_subject_model
+import domains.schoolInformation.school_information_model
+import domains.classes.class_model
+import domains.classroom.classroom_model
+import domains.schedule.schedule_model

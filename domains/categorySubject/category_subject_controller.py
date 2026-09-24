@@ -1,7 +1,7 @@
 from fastapi import Depends, status
 from sqlalchemy.orm import Session
 from config.database.db import get_db
-from common.base.baseController import BaseController
+from common.base.baseController import BaseController, PaginationParams
 from domains.categorySubject.category_subject_service import CategorySubjectService
 from domains.categorySubject.dto.category_subject_dto import CategorySubjectCreate, CategorySubjectUpdate
 
@@ -12,11 +12,17 @@ class CategorySubjectController(BaseController, prefix="/category-subjects", tag
     @classmethod
     def register_routes(cls):
         @cls.router.get("/", status_code=status.HTTP_200_OK)
-        def get_all(db: Session = Depends(get_db)):
+        def get_all(pagination: PaginationParams = Depends(), db: Session = Depends(get_db)):
             try:
-                categories = cls._service.get_all(db)
-                return cls.handle_success(
-                    data=categories, message="Category subjects retrieved successfully"
+                paginator_dict = pagination.to_dict()
+                categories = cls._service.get_all(db, paginator=paginator_dict)
+                total_data = cls._service.count_all(db)
+                return cls.handle_paginated_success(
+                    data=categories,
+                    total_data = total_data,
+                    page=pagination.page,
+                    limit=pagination.limit,
+                    message="Category subjects retrieved successfully",
                 )
             except Exception as error:
                 cls.handle_error(detail=str(error))

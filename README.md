@@ -1,4 +1,5 @@
 version python 1.11.3
+# docker exec presensi-app python create_tables.py
 
 # role user
 

@@ -14,7 +14,8 @@ class CategorySubjectUpdate(BaseModel):
 
 
 class CategorySubjectResponse(BaseModel):
-    id: str
+    id_category_subject: Optional[str] = None
+    id: Optional[str] = None
     name: str
     status: bool
     created_at: datetime

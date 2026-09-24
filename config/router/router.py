@@ -79,8 +79,32 @@ class Router:
         from domains.categorySubject.category_subject_controller import CategorySubjectController
         self.app.include_router(CategorySubjectController.get_router(), prefix="/api")
 
-        from domains.whatsapp.whatsapp_controller import WhatsAppController
-        self.app.include_router(WhatsAppController.get_router(), prefix="/api")
+        from domains.major.major_controller import MajorController
+        self.app.include_router(MajorController.get_router(), prefix="/api")
+
+        from domains.schoolInformation.school_information_controller import SchoolInformationController
+        self.app.include_router(SchoolInformationController.get_router(), prefix="/api")
+
+        from domains.classes.class_controller import ClassController
+        self.app.include_router(ClassController.get_router(), prefix="/api")
+
+        from domains.teacherSubject.teacher_subject_controller import TeacherSubjectController
+        self.app.include_router(TeacherSubjectController.get_router(), prefix="/api")
+
+        from domains.classroom.classroom_controller import ClassroomController
+        self.app.include_router(ClassroomController.get_router(), prefix="/api")
+
+        from domains.schedule.schedule_controller import (
+            CategoryScheduleTimeController,
+            ScheduleTimeController,
+            ScheduleController,
+        )
+        self.app.include_router(CategoryScheduleTimeController.get_router(), prefix="/api")
+        self.app.include_router(ScheduleTimeController.get_router(), prefix="/api")
+        self.app.include_router(ScheduleController.get_router(), prefix="/api")
+
+        from domains.effectiveWeek.effective_week_controller import EffectiveWeekController
+        self.app.include_router(EffectiveWeekController.get_router(), prefix="/api")
 
         @self.app.get("/")
         def root():
@@ -94,24 +118,6 @@ class Router:
         async def startup_event():
             asyncio.create_task(cleanup_temp_files_periodic(
                 interval_seconds=10, max_age_seconds=10))
-
-        @self.app.on_event("shutdown")
-        async def shutdown_event():
-            import os
-            from config.whatsapp.whatsapp import wa_service
-            print("[Server] Shutting down WhatsApp service...")
-            loop = asyncio.get_event_loop()
-            try:
-                await asyncio.wait_for(
-                    loop.run_in_executor(None, wa_service.stop),
-                    timeout=1.0
-                )
-            except asyncio.TimeoutError:
-                print("[Server] WhatsApp stop timed out, forcing exit.")
-            print("[Server] WhatsApp service stopped.")
-            # Force kill semua thread Go runtime dari neonize (CGO)
-            # agar server tidak stuck setelah shutdown
-            os._exit(0)
 
     def listen(self):
         print(f"[Server] Server running at http://{self.host}:{self.port}")

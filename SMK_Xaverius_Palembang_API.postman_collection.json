@@ -1,0 +1,1497 @@
+{
+  "info": {
+    "_postman_id": "smk-xaverius-palembang-api",
+    "name": "SMK Xaverius Palembang API",
+    "description": "Postman Collection untuk testing semua API route backend SMK Xaverius Palembang (FastAPI + MySQL). Base URL: http://localhost:8000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "student_id",
+      "value": "STUDENT_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "employee_id",
+      "value": "EMPLOYEE_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "subject_id",
+      "value": "SUBJECT_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "category_subject_id",
+      "value": "CATEGORY_SUBJECT_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "major_id",
+      "value": "MAJOR_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "school_information_id",
+      "value": "SCHOOL_INFORMATION_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "class_id",
+      "value": "CLASS_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "teacher_subject_id",
+      "value": "TEACHER_SUBJECT_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "classroom_id",
+      "value": "CLASSROOM_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "category_schedule_time_id",
+      "value": "CATEGORY_SCHEDULE_TIME_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "schedule_time_id",
+      "value": "SCHEDULE_TIME_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "schedule_id",
+      "value": "SCHEDULE_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "effective_week_id",
+      "value": "EFFECTIVE_WEEK_ID_HERE",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "General",
+      "item": [
+        {
+          "name": "Root - Welcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Root endpoint - Welcome message"
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/health-check",
+              "host": ["{{base_url}}"],
+              "path": ["api", "health-check"]
+            },
+            "description": "Health check endpoint - memastikan server berjalan"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Students",
+      "item": [
+        {
+          "name": "Get All Students",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/students/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "students", ""]
+            },
+            "description": "Mengambil semua data siswa"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Student by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/students/{{student_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "students", "{{student_id}}"]
+            },
+            "description": "Mengambil data siswa berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"student001\",\n  \"password\": \"password123\",\n  \"nis\": \"12345678\",\n  \"nisn\": \"1234567890\",\n  \"full_name\": \"Budi Santoso\",\n  \"email\": \"budi.santoso@example.com\",\n  \"phone_number\": \"081234567890\",\n  \"description\": \"Siswa kelas X\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/students/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "students", ""]
+            },
+            "description": "Membuat data siswa baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Student",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"student001_updated\",\n  \"full_name\": \"Budi Santoso Updated\",\n  \"phone_number\": \"089876543210\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/students/{{student_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "students", "{{student_id}}"]
+            },
+            "description": "Update data siswa berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Student",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/students/{{student_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "students", "{{student_id}}"]
+            },
+            "description": "Hapus data siswa berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Student Avatar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"temp_filename\": \"TEMP_FILENAME_FROM_UPLOAD_RESPONSE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/students/{{student_id}}/avatar",
+              "host": ["{{base_url}}"],
+              "path": ["api", "students", "{{student_id}}", "avatar"]
+            },
+            "description": "Update avatar siswa. Perlu upload file ke /api/upload/ dulu, lalu gunakan temp_filename dari responsenya."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Employees",
+      "item": [
+        {
+          "name": "Get All Employees",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/employees/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "employees", ""]
+            },
+            "description": "Mengambil semua data karyawan/guru"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"username\": \"guru.matematika\",\n    \"password\": \"password123\"\n  },\n  \"profile\": {\n    \"first_name\": \"Ahmad\",\n    \"last_name\": \"Fauzi\",\n    \"niy\": \"NIY001\",\n    \"gender\": \"Laki-laki\",\n    \"birth_place\": \"Palembang\",\n    \"birth_date\": \"1985-06-15\",\n    \"email\": \"ahmad.fauzi@smkxaverius.sch.id\",\n    \"address\": \"Jl. Sudirman No. 1\",\n    \"RT\": \"01\",\n    \"RW\": \"02\",\n    \"zip_code\": \"30111\",\n    \"phone_number\": \"082112345678\",\n    \"description\": \"Guru Matematika\",\n    \"status\": true\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/employees/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "employees", ""]
+            },
+            "description": "Membuat data karyawan/guru baru. Field user dan profile wajib diisi."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Employee",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Ahmad Updated\",\n  \"phone_number\": \"082198765432\",\n  \"address\": \"Jl. Merdeka No. 5\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/employees/{{employee_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "employees", "{{employee_id}}"]
+            },
+            "description": "Update data karyawan/guru berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/employees/{{employee_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "employees", "{{employee_id}}"]
+            },
+            "description": "Hapus data karyawan/guru berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category Subjects",
+      "item": [
+        {
+          "name": "Get All Category Subjects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/category-subjects/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category-subjects", ""]
+            },
+            "description": "Mengambil semua data kategori mata pelajaran"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category Subject by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/category-subjects/{{category_subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category-subjects", "{{category_subject_id}}"]
+            },
+            "description": "Mengambil data kategori mata pelajaran berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category Subject",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mata Pelajaran Wajib\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/category-subjects/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category-subjects", ""]
+            },
+            "description": "Membuat data kategori mata pelajaran baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category Subject",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mata Pelajaran Wajib Updated\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/category-subjects/{{category_subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category-subjects", "{{category_subject_id}}"]
+            },
+            "description": "Update data kategori mata pelajaran berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category Subject",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/category-subjects/{{category_subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category-subjects", "{{category_subject_id}}"]
+            },
+            "description": "Hapus data kategori mata pelajaran berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Subjects",
+      "item": [
+        {
+          "name": "Get All Subjects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/subjects/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subjects", ""]
+            },
+            "description": "Mengambil semua data mata pelajaran"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Subject by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/subjects/{{subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subjects", "{{subject_id}}"]
+            },
+            "description": "Mengambil data mata pelajaran berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Subject",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Matematika\",\n  \"id_category_subject\": \"{{category_subject_id}}\",\n  \"id_major\": \"{{major_id}}\",\n  \"code_subject\": \"MTK001\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/subjects/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subjects", ""]
+            },
+            "description": "Membuat data mata pelajaran baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Subject",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Matematika Wajib\",\n  \"code_subject\": \"MTK002\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/subjects/{{subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subjects", "{{subject_id}}"]
+            },
+            "description": "Update data mata pelajaran berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Subject",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/subjects/{{subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subjects", "{{subject_id}}"]
+            },
+            "description": "Hapus data mata pelajaran berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Majors",
+      "item": [
+        {
+          "name": "Get All Majors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/majors/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "majors", ""]
+            },
+            "description": "Mengambil semua data jurusan"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Major by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/majors/{{major_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "majors", "{{major_id}}"]
+            },
+            "description": "Mengambil data jurusan berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Major",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teknik Komputer dan Jaringan\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/majors/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "majors", ""]
+            },
+            "description": "Membuat data jurusan baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Major",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teknik Komputer dan Jaringan (TKJ)\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/majors/{{major_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "majors", "{{major_id}}"]
+            },
+            "description": "Update data jurusan berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Major",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/majors/{{major_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "majors", "{{major_id}}"]
+            },
+            "description": "Hapus data jurusan berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "School Informations",
+      "item": [
+        {
+          "name": "Get All School Informations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/school-informations/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "school-informations", ""]
+            },
+            "description": "Mengambil semua data informasi sekolah"
+          },
+          "response": []
+        },
+        {
+          "name": "Get School Information by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/school-informations/{{school_information_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "school-informations", "{{school_information_id}}"]
+            },
+            "description": "Mengambil data informasi sekolah berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create School Information",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name_school\": \"SMK Xaverius Palembang\",\n  \"periode\": \"2025/2026\",\n  \"NPSN\": \"10604359\",\n  \"id_headmaster\": \"{{employee_id}}\",\n  \"alamat\": \"Jl. Bangau No. 60, Palembang\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/school-informations/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "school-informations", ""]
+            },
+            "description": "Membuat data informasi sekolah baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update School Information",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name_school\": \"SMK Xaverius 1 Palembang\",\n  \"periode\": \"2025/2026\",\n  \"alamat\": \"Jl. Bangau No. 60, Palembang, Sumatera Selatan\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/school-informations/{{school_information_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "school-informations", "{{school_information_id}}"]
+            },
+            "description": "Update data informasi sekolah berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete School Information",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/school-informations/{{school_information_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "school-informations", "{{school_information_id}}"]
+            },
+            "description": "Hapus data informasi sekolah berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Classes",
+      "item": [
+        {
+          "name": "Get All Classes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/classes/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "classes", ""]
+            },
+            "description": "Mengambil semua data kelas"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Class by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/classes/{{class_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "classes", "{{class_id}}"]
+            },
+            "description": "Mengambil data kelas berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Class",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_major\": \"{{major_id}}\",\n  \"id_class_guardian\": \"{{employee_id}}\",\n  \"name\": \"X TKJ 1\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/classes/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "classes", ""]
+            },
+            "description": "Membuat data kelas baru. id_major wajib diisi."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Class",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"X TKJ 1 Updated\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/classes/{{class_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "classes", "{{class_id}}"]
+            },
+            "description": "Update data kelas berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Class",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/classes/{{class_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "classes", "{{class_id}}"]
+            },
+            "description": "Hapus data kelas berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Teacher Subjects",
+      "item": [
+        {
+          "name": "Get All Teacher Subjects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/teacher-subjects/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "teacher-subjects", ""]
+            },
+            "description": "Mengambil semua data penugasan guru mengajar"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Teacher Subject by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/teacher-subjects/{{teacher_subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "teacher-subjects", "{{teacher_subject_id}}"]
+            },
+            "description": "Mengambil data penugasan guru mengajar berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Teacher Subject",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_category_subject\": \"{{category_subject_id}}\",\n  \"id_subject\": \"{{subject_id}}\",\n  \"id_teacher\": \"{{employee_id}}\",\n  \"jp_amount\": 4,\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/teacher-subjects/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "teacher-subjects", ""]
+            },
+            "description": "Membuat data penugasan guru mengajar baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Teacher Subject",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jp_amount\": 6,\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/teacher-subjects/{{teacher_subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "teacher-subjects", "{{teacher_subject_id}}"]
+            },
+            "description": "Update data penugasan guru mengajar berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Teacher Subject",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/teacher-subjects/{{teacher_subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "teacher-subjects", "{{teacher_subject_id}}"]
+            },
+            "description": "Hapus data penugasan guru mengajar berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Classrooms",
+      "item": [
+        {
+          "name": "Get All Classrooms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/classrooms/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "classrooms", ""]
+            },
+            "description": "Mengambil semua data ruang kelas"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Classroom by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/classrooms/{{classroom_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "classrooms", "{{classroom_id}}"]
+            },
+            "description": "Mengambil data ruang kelas berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Classroom",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_teacher_subject\": \"{{teacher_subject_id}}\",\n  \"id_class\": \"{{class_id}}\",\n  \"id_school_information\": \"{{school_information_id}}\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/classrooms/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "classrooms", ""]
+            },
+            "description": "Membuat data ruang kelas baru. Semua ID wajib diisi."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Classroom",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/classrooms/{{classroom_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "classrooms", "{{classroom_id}}"]
+            },
+            "description": "Update data ruang kelas berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Classroom",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/classrooms/{{classroom_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "classrooms", "{{classroom_id}}"]
+            },
+            "description": "Hapus data ruang kelas berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category Schedule Times",
+      "item": [
+        {
+          "name": "Get All Category Schedule Times",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/category-schedule-times/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category-schedule-times", ""]
+            },
+            "description": "Mengambil semua data kategori waktu jadwal (contoh: Jam Pelajaran Pagi, Siang)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category Schedule Time by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/category-schedule-times/{{category_schedule_time_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category-schedule-times", "{{category_schedule_time_id}}"]
+            },
+            "description": "Mengambil data kategori waktu jadwal berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category Schedule Time",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jam Pelajaran Pagi\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/category-schedule-times/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category-schedule-times", ""]
+            },
+            "description": "Membuat data kategori waktu jadwal baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category Schedule Time",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jam Pelajaran Reguler\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/category-schedule-times/{{category_schedule_time_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category-schedule-times", "{{category_schedule_time_id}}"]
+            },
+            "description": "Update data kategori waktu jadwal berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category Schedule Time",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/category-schedule-times/{{category_schedule_time_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "category-schedule-times", "{{category_schedule_time_id}}"]
+            },
+            "description": "Hapus data kategori waktu jadwal berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Schedule Times",
+      "item": [
+        {
+          "name": "Get All Schedule Times",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/schedule-times/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "schedule-times", ""]
+            },
+            "description": "Mengambil semua data waktu jadwal (hari dan jam)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Schedule Time by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/schedule-times/{{schedule_time_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "schedule-times", "{{schedule_time_id}}"]
+            },
+            "description": "Mengambil data waktu jadwal berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Schedule Time",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hari\": \"Senin\",\n  \"jam_awal\": \"07:00\",\n  \"jam_akhir\": \"07:45\",\n  \"id_category_schendule_time\": \"{{category_schedule_time_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/schedule-times/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "schedule-times", ""]
+            },
+            "description": "Membuat data waktu jadwal baru. hari: Senin/Selasa/Rabu/Kamis/Jumat/Sabtu. Format jam: HH:MM"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Schedule Time",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jam_awal\": \"07:15\",\n  \"jam_akhir\": \"08:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/schedule-times/{{schedule_time_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "schedule-times", "{{schedule_time_id}}"]
+            },
+            "description": "Update data waktu jadwal berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Schedule Time",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/schedule-times/{{schedule_time_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "schedule-times", "{{schedule_time_id}}"]
+            },
+            "description": "Hapus data waktu jadwal berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Schedules",
+      "item": [
+        {
+          "name": "Get All Schedules",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/schedules/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "schedules", ""]
+            },
+            "description": "Mengambil semua data jadwal pelajaran"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Schedule by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/schedules/{{schedule_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "schedules", "{{schedule_id}}"]
+            },
+            "description": "Mengambil data jadwal pelajaran berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Schedule",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_category_subject\": \"{{category_subject_id}}\",\n  \"id_duty_teacher\": \"{{employee_id}}\",\n  \"id_class\": \"{{class_id}}\",\n  \"id_schendule_time\": \"{{schedule_time_id}}\",\n  \"status\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/schedules/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "schedules", ""]
+            },
+            "description": "Membuat data jadwal pelajaran baru. id_duty_teacher opsional."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Schedule",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/schedules/{{schedule_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "schedules", "{{schedule_id}}"]
+            },
+            "description": "Update data jadwal pelajaran berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Schedule",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/schedules/{{schedule_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "schedules", "{{schedule_id}}"]
+            },
+            "description": "Hapus data jadwal pelajaran berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Effective Weeks",
+      "item": [
+        {
+          "name": "Get All Effective Weeks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/effective-weeks/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "effective-weeks", ""]
+            },
+            "description": "Mengambil semua data minggu efektif"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Effective Week by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/effective-weeks/{{effective_week_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "effective-weeks", "{{effective_week_id}}"]
+            },
+            "description": "Mengambil data minggu efektif berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Effective Week",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_subject\": \"{{subject_id}}\",\n  \"Alokasi_Intrakurikuler\": 36,\n  \"Alokasi_Kokurikuler\": 12\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/effective-weeks/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "effective-weeks", ""]
+            },
+            "description": "Membuat data minggu efektif baru"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Effective Week",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Alokasi_Intrakurikuler\": 40,\n  \"Alokasi_Kokurikuler\": 8\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/effective-weeks/{{effective_week_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "effective-weeks", "{{effective_week_id}}"]
+            },
+            "description": "Update data minggu efektif berdasarkan ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Effective Week",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/effective-weeks/{{effective_week_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "effective-weeks", "{{effective_week_id}}"]
+            },
+            "description": "Hapus data minggu efektif berdasarkan ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Upload File",
+      "item": [
+        {
+          "name": "Upload File to Temp",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": "Pilih file yang akan diupload. Format yang diizinkan: .jpg, .jpeg, .png, .pdf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/upload/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "upload", ""]
+            },
+            "description": "Upload file ke folder temp. Response akan berisi temp_filename yang bisa digunakan untuk endpoint lain (contoh: Update Avatar Student). Format file yang diizinkan: .jpg, .jpeg, .png, .pdf"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

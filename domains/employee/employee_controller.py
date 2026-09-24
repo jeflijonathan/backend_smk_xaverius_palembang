@@ -1,10 +1,9 @@
 from fastapi import Depends, status
 from sqlalchemy.orm import Session
 from config.database.db import get_db
-from common.base.baseController import BaseController
 from domains.employee.employee_service import EmployeeService
 from domains.employee.dto.employee_schema import EmployeeCreate, EmployeeUpdate
-
+from common.base.baseController import BaseController, PaginationParams
 
 class EmployeeController(BaseController, prefix="/employees", tags=["Employees"]):
     _service = EmployeeService()
@@ -12,11 +11,18 @@ class EmployeeController(BaseController, prefix="/employees", tags=["Employees"]
     @classmethod
     def register_routes(cls):
         @cls.router.get("/", status_code=status.HTTP_200_OK)
-        def get_employees(db: Session = Depends(get_db)):
+        def get_employees(pagination: PaginationParams = Depends(),db: Session = Depends(get_db)):
             try:
-                employees = cls._service.get_employees(db)
-                return cls.handle_success(
-                    data=employees, message="Employees retrieved successfully"
+                paginator_dict = pagination.to_dict()
+                employee = cls._service.get_all(db, paginator=paginator_dict)
+                total_data = cls._service.count_all(db)
+
+                return cls.handle_paginated_success(
+                    data=employee,
+                    total_data = total_data,
+                    page=pagination.page,
+                    limit=pagination.limit,
+                    message="Employees retrieved successfully",
                 )
             except Exception as error:
                 cls.handle_error(detail=str(error))

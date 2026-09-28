@@ -55,14 +55,16 @@ class BaseController:
             "status": "SUCCESS",
             "status_code": status_code,
             "message": message,
-            "data": data if data is not None else [],
-            "pagination": {
-                "total_data": total_data,
-                "page": page,
-                "limit": limit,
-                "total_pages": total_pages,
-                "has_next": page < total_pages,
-                "has_prev": page > 1,
+            "data": {
+                "data": data if data is not None else [],
+                "pagination": {
+                    "total_data": total_data,
+                    "page": page,
+                    "limit": limit,
+                    "total_pages": total_pages,
+                    "has_next": page < total_pages,
+                    "has_prev": page > 1,
+                },
             },
         }
 

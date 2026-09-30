@@ -83,11 +83,15 @@ class BaseMySQLService(Generic[ModelType]):
             raise
 
     def find_one(
-        self, db: Session, filter_data: Optional[Dict[str, Any]] = None
+        self, db: Session, filter_data: Optional[Dict[str, Any]] = None, options: Optional[List[Any]] = None
     ) -> Optional[ModelType]:
         try:
             filter_data = filter_data or {}
             stmt = select(self.model)
+
+            if options:
+                for opt in options:
+                    stmt = stmt.options(opt)
 
             for key, value in filter_data.items():
                 if hasattr(self.model, key):

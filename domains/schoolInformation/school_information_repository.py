@@ -23,4 +23,6 @@ class SchoolInformationRepository(BaseMySQLService[SchoolInformationModel]):
         return self.count(db)
 
     def find_by_id(self, db: Session, id_school_information: str) -> Optional[SchoolInformationModel]:
-        return self.find_one(db, {"id_school_information": id_school_information})
+        options = [joinedload(SchoolInformationModel.headmaster)]
+        return self.find_one(db, {"id_school_information": id_school_information}, options)
+    

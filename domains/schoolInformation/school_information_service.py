@@ -11,8 +11,11 @@ class SchoolInformationService:
     def __init__(self):
         self.repo = SchoolInformationRepository()
 
-    def get_all(self, db: Session) -> List:
-        return self.repo.find_all(db)
+    def get_all(self, db: Session, paginator: dict) -> List:
+        return self.repo.find_all(db, paginator=paginator)
+
+    def count_all(self, db: Session) -> int:
+        return self.repo.count_all(db)
 
     def get_by_id(self, db: Session, id_school_information: str) -> Optional[object]:
         return self.repo.find_by_id(db, id_school_information)

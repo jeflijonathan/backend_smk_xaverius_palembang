@@ -1,3 +1,4 @@
+from sqlalchemy.orm import joinedload
 from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
 from common.base.baseMysql import BaseMySQLService
@@ -8,9 +9,18 @@ class SchoolInformationRepository(BaseMySQLService[SchoolInformationModel]):
     def __init__(self):
         super().__init__(SchoolInformationModel)
 
-    def find_all(self, db: Session, where: Dict[str, Any] = None) -> List[SchoolInformationModel]:
+    def find_all(
+        self, 
+        db: Session, 
+        where: Optional[Dict[str, Any]] = None, 
+        paginator: Optional[Dict[str, int]] = None
+    ) -> List[SchoolInformationModel]:
         filter_data = {"query": where or {}}
-        return self.find(db, filter_data)
+        options = [joinedload(SchoolInformationModel.headmaster)]
+        return self.find(db, filter_data, paginator, options)
+
+    def count_all(self, db: Session) -> int:
+        return self.count(db)
 
     def find_by_id(self, db: Session, id_school_information: str) -> Optional[SchoolInformationModel]:
         return self.find_one(db, {"id_school_information": id_school_information})

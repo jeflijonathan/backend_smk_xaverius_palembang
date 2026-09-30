@@ -26,6 +26,7 @@ class BaseMySQLService(Generic[ModelType]):
         db: Session,
         filter_data: Optional[Dict[str, Any]] = None,
         paginator: Optional[Dict[str, Any]] = None,
+        options: Optional[List[Any]] = None,
     ) -> List[ModelType]:
         try:
             filter_data = filter_data or {}
@@ -33,6 +34,10 @@ class BaseMySQLService(Generic[ModelType]):
             sorter = filter_data.get("sorter", None)
 
             stmt = select(self.model)
+
+            if options:
+                for opt in options:
+                    stmt = stmt.options(opt)
 
             if query_dict:
                 for key, value in query_dict.items():

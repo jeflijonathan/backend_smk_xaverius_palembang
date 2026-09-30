@@ -1,3 +1,4 @@
+from common.base.baseController import PaginationParams
 from fastapi import Depends, status
 from sqlalchemy.orm import Session
 from config.database.db import get_db
@@ -17,11 +18,17 @@ class SchoolInformationController(
     @classmethod
     def register_routes(cls):
         @cls.router.get("/", status_code=status.HTTP_200_OK)
-        def get_all(db: Session = Depends(get_db)):
+        def get_all(pagination: PaginationParams = Depends(PaginationParams), db: Session = Depends(get_db)):
             try:
-                records = cls._service.get_all(db)
-                return cls.handle_success(
-                    data=records, message="School information retrieved successfully"
+                paginator_dict = pagination.to_dict()
+                records = cls._service.get_all(db, paginator=paginator_dict)
+                total_data = cls._service.count_all(db)
+                return cls.handle_paginated_success(
+                    data=records,
+                    total_data = total_data,
+                    page=pagination.page,
+                    limit=pagination.limit,
+                    message="Category subjects retrieved successfully",
                 )
             except Exception as error:
                 cls.handle_error(detail=str(error))

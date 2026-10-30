@@ -26,6 +26,8 @@ class SchoolSubjectModel(Base, Timestamps):
 
     code_subject = Column(String(50), nullable=True)
     name = Column(String(255), nullable=False)
+    kelas = Column(String(10), nullable=True)
+    fase = Column(String(10), nullable=True)
     status = Column(Boolean, default=True, nullable=False)
 
     category = relationship("CategorySubjectModel", back_populates="subjects")

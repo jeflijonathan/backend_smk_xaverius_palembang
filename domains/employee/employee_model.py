@@ -3,27 +3,10 @@ from sqlalchemy import Column, String, ForeignKey, Text, Boolean, Date
 from sqlalchemy.orm import relationship
 from config.database.db import Base
 from common.consts.timestamps import Timestamps
-from domains.auth.associations import employee_roles_association
 
 
 def generate_uuid():
     return str(uuid.uuid4())
-
-
-class UserEmployeeModel(Base, Timestamps):
-    __tablename__ = "users_employees"
-
-    id = Column(String(36), primary_key=True,
-                default=generate_uuid, nullable=False)
-    username = Column(String(100), unique=True, nullable=False, index=True)
-    password = Column(String(255), nullable=False)
-
-    profile = relationship(
-        "EmployeeModel",
-        back_populates="user",
-        uselist=False,
-        cascade="all, delete-orphan"
-    )
 
 
 class EmployeeDetailModel(Base, Timestamps):
@@ -47,11 +30,8 @@ class EmployeeDetailModel(Base, Timestamps):
 
 class EmployeeModel(Base, Timestamps):
     __tablename__ = "employees"
-    
     id = Column(String(36), primary_key=True, default=generate_uuid, nullable=False)
-
-    user_id = Column(String(36), ForeignKey("users_employees.id", ondelete="CASCADE"), unique=True, nullable=False)
-
+    user_id = Column(String(36), ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=False)
     first_name = Column(String(255), nullable=False)
     last_name = Column(String(255), nullable=True)
     profile_url = Column(String(255), nullable=True)
@@ -59,11 +39,7 @@ class EmployeeModel(Base, Timestamps):
     email = Column(String(255), unique=True, nullable=False, index=True)
     status = Column(Boolean, default=True, nullable=False)
 
-    roles = relationship(
-        "RoleModel", secondary=employee_roles_association, back_populates="employees"
-    )
-
-    user = relationship("UserEmployeeModel", back_populates="profile")
+    user = relationship("UserModel", back_populates="employee_profile")
     
     detail = relationship(
         "EmployeeDetailModel", 
@@ -76,14 +52,17 @@ class EmployeeModel(Base, Timestamps):
         "SchoolInformationModel",
         back_populates="headmaster"
     )
+
     guardian_classes = relationship(
         "ClassModel",
         back_populates="class_guardian"
     )
+
     teacher_subjects = relationship(
         "TeacherSubjectModel",
         back_populates="teacher"
     )
+
     duty_schedules = relationship(
         "ScheduleModel",
         back_populates="duty_teacher"

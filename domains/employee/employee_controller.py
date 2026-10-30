@@ -2,7 +2,7 @@ from fastapi import Depends, status
 from sqlalchemy.orm import Session
 from config.database.db import get_db
 from domains.employee.employee_service import EmployeeService
-from domains.employee.dto.employee_schema import EmployeeCreate, EmployeeUpdate
+from domains.employee.dto.employee_schema import EmployeeCreate, EmployeeUpdate, EmployeeResponse
 from common.base.baseController import BaseController, PaginationParams
 
 class EmployeeController(BaseController, prefix="/employees", tags=["Employees"]):
@@ -14,15 +14,36 @@ class EmployeeController(BaseController, prefix="/employees", tags=["Employees"]
         def get_employees(pagination: PaginationParams = Depends(),db: Session = Depends(get_db)):
             try:
                 paginator_dict = pagination.to_dict()
-                employee = cls._service.get_all(db, paginator=paginator_dict)
-                total_data = cls._service.count_all(db)
+                employees = cls._service.get_all(db, paginator=paginator_dict)
+                total_data = cls._service.count_all(
+                    db,
+                    search=pagination.value,
+                )
+
+                data = [EmployeeResponse.model_validate(emp).model_dump() for emp in employees]
 
                 return cls.handle_paginated_success(
-                    data=employee,
-                    total_data = total_data,
+                    data=data,
+                    total_data=total_data,
                     page=pagination.page,
                     limit=pagination.limit,
                     message="Employees retrieved successfully",
+                )
+            except Exception as error:
+                cls.handle_error(detail=str(error))
+
+        @cls.router.get("/{id}", status_code=status.HTTP_200_OK)
+        def get_employee_by_id(id: str, db: Session = Depends(get_db)):
+            try:
+                employee = cls._service.get_by_id(db, id)
+                if not employee:
+                    cls.handle_error(
+                        detail=f"Employee with id {id} not found",
+                        status_code=status.HTTP_404_NOT_FOUND,
+                    )
+                res_data = EmployeeResponse.model_validate(employee).model_dump()
+                return cls.handle_success(
+                    data=res_data, message="Employee retrieved successfully"
                 )
             except Exception as error:
                 cls.handle_error(detail=str(error))
@@ -31,14 +52,16 @@ class EmployeeController(BaseController, prefix="/employees", tags=["Employees"]
         def create_employee(data: EmployeeCreate, db: Session = Depends(get_db)):
             try:
                 employee = cls._service.create_employee(db, data)
+                res_data = EmployeeResponse.model_validate(employee).model_dump()
                 return cls.handle_success(
-                    data=employee,
+                    data=res_data,
                     message="Employee created successfully",
                     status_code=status.HTTP_201_CREATED,
                 )
             except ValueError as error:
                 cls.handle_error(detail=str(error), status_code=status.HTTP_400_BAD_REQUEST)
             except Exception as error:
+                print("ERROR DATABASE:", str(error))
                 cls.handle_error(detail=str(error))
 
         @cls.router.patch("/{id}", status_code=status.HTTP_200_OK)
@@ -50,8 +73,10 @@ class EmployeeController(BaseController, prefix="/employees", tags=["Employees"]
                         detail=f"Employee with id {id} not found",
                         status_code=status.HTTP_404_NOT_FOUND,
                     )
+
+                res_data = EmployeeResponse.model_validate(employee).model_dump()
                 return cls.handle_success(
-                    data=employee, message="Employee updated successfully"
+                    data=res_data, message="Employee updated successfully"
                 )
             except ValueError as error:
                 cls.handle_error(detail=str(error), status_code=status.HTTP_400_BAD_REQUEST)
@@ -67,8 +92,9 @@ class EmployeeController(BaseController, prefix="/employees", tags=["Employees"]
                         detail=f"Employee with id {id} not found",
                         status_code=status.HTTP_404_NOT_FOUND,
                     )
+                res_data = EmployeeResponse.model_validate(employee).model_dump()
                 return cls.handle_success(
-                    data=employee, message="Employee deleted successfully"
+                    data=res_data, message="Employee deleted successfully"
                 )
             except Exception as error:
                 cls.handle_error(detail=str(error))

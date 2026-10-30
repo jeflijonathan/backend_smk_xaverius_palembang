@@ -20,6 +20,7 @@ import domains.schoolInformation.school_information_model
 import domains.classes.class_model
 import domains.classroom.classroom_model
 import domains.schedule.schedule_model
+import domains.announcement.announcement_model
 
 if __name__ == "__main__":
     print("Creating all tables in database...")

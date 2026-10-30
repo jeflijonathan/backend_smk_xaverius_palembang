@@ -59,10 +59,9 @@ class BaseMySQLService(Generic[ModelType]):
                 if limit is not None and int(limit) > 0:
                     limit = int(limit)
                     offset = (page - 1) * limit
-                    # Urutan yang benar: offset dulu baru limit
                     stmt = stmt.offset(offset).limit(limit)
 
-            return list(db.scalars(stmt).all())
+            return list(db.scalars(stmt).unique().all())
         except Exception:
             raise
 
@@ -97,7 +96,7 @@ class BaseMySQLService(Generic[ModelType]):
                 if hasattr(self.model, key):
                     stmt = stmt.where(getattr(self.model, key) == value)
 
-            return db.scalars(stmt).first()
+            return db.scalars(stmt).unique().first()
         except Exception:
             raise
 

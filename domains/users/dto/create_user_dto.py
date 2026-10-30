@@ -9,7 +9,6 @@ class CreateUserDTO(BaseModel):
         ..., min_length=2, max_length=255, description="Nama lengkap pengguna"
     )
     username: str = Field(..., min_length=4, max_length=100, pattern=r"^[a-zA-Z0-9_]+$")
-    email: EmailStr
     password: str = Field(..., min_length=6, max_length=255)
     nomor_telepon: Optional[str] = Field(None, max_length=20)
     description: Optional[str] = None

@@ -10,3 +10,5 @@ class UploadFileResponseDTO(BaseDTO):
     
     class Config:
         from_attributes = True
+
+UploadFileResponse = UploadFileResponseDTO

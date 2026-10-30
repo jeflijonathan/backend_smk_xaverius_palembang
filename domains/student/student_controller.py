@@ -1,10 +1,14 @@
 from fastapi import Depends, status, Body
 from sqlalchemy.orm import Session
 from config.database.db import get_db
-from common.base.baseController import BaseController
+from common.base.baseController import BaseController, PaginationParams
 from common.utils.file_location import move_temp_to_location
 from domains.student.student_service import StudentService
-from domains.student.dto.student_dto import CreateStudentDTO, UpdateStudentDTO
+from domains.student.dto.student_dto import (
+    CreateStudentDTO,
+    UpdateStudentDTO,
+    StudentResponseDTO,
+)
 
 
 class StudentController(BaseController, prefix="/students", tags=["Students"]):
@@ -13,11 +17,28 @@ class StudentController(BaseController, prefix="/students", tags=["Students"]):
     @classmethod
     def register_routes(cls):
         @cls.router.get("/", status_code=status.HTTP_200_OK)
-        def get_all(db: Session = Depends(get_db)):
+        def get_all(
+            pagination: PaginationParams = Depends(),
+            db: Session = Depends(get_db),
+        ):
             try:
-                students = cls._student_service.get_all_students(db)
-                return cls.handle_success(
-                    data=students, message="Students retrieved successfully"
+                paginator_dict = pagination.to_dict()
+                students = cls._student_service.get_all_students(
+                    db, paginator=paginator_dict
+                )
+                total_data = cls._student_service.count_all(
+                    db, search=pagination.value
+                )
+                data = [
+                    StudentResponseDTO.from_orm_student(s).model_dump()
+                    for s in students
+                ]
+                return cls.handle_paginated_success(
+                    data=data,
+                    total_data=total_data,
+                    page=pagination.page,
+                    limit=pagination.limit,
+                    message="Students retrieved successfully",
                 )
             except Exception as error:
                 cls.handle_error(detail=str(error))
@@ -31,8 +52,9 @@ class StudentController(BaseController, prefix="/students", tags=["Students"]):
                         detail=f"Student with id {student_id} not found",
                         status_code=status.HTTP_404_NOT_FOUND,
                     )
+                res_data = StudentResponseDTO.from_orm_student(student).model_dump()
                 return cls.handle_success(
-                    data=student, message="Student retrieved successfully"
+                    data=res_data, message="Student retrieved successfully"
                 )
             except Exception as error:
                 cls.handle_error(detail=str(error))
@@ -41,8 +63,9 @@ class StudentController(BaseController, prefix="/students", tags=["Students"]):
         def create(student_data: CreateStudentDTO, db: Session = Depends(get_db)):
             try:
                 student = cls._student_service.create_student(db, student_data)
+                res_data = StudentResponseDTO.from_orm_student(student).model_dump()
                 return cls.handle_success(
-                    data=student,
+                    data=res_data,
                     message="Student created successfully",
                     status_code=status.HTTP_201_CREATED,
                 )
@@ -64,8 +87,9 @@ class StudentController(BaseController, prefix="/students", tags=["Students"]):
                         detail=f"Student with id {student_id} not found",
                         status_code=status.HTTP_404_NOT_FOUND,
                     )
+                res_data = StudentResponseDTO.from_orm_student(student).model_dump()
                 return cls.handle_success(
-                    data=student, message="Student updated successfully"
+                    data=res_data, message="Student updated successfully"
                 )
             except ValueError as error:
                 cls.handle_error(
@@ -78,8 +102,13 @@ class StudentController(BaseController, prefix="/students", tags=["Students"]):
         def delete_student(student_id: str, db: Session = Depends(get_db)):
             try:
                 student = cls._student_service.delete_student(db, student_id)
+                res_data = (
+                    StudentResponseDTO.from_orm_student(student).model_dump()
+                    if student
+                    else None
+                )
                 return cls.handle_success(
-                    data=student, message="Student deleted successfully"
+                    data=res_data, message="Student deleted successfully"
                 )
             except ValueError as error:
                 cls.handle_error(

@@ -58,14 +58,7 @@ class UserController(BaseController, prefix="/users", tags=["Users"]):
                 )
             except Exception as error:
                 cls.handle_error(detail=str(error))
-
-        # ──────────────────────────────────────────────
-        # CONTOH: Menerapkan move_temp_to_location
-        # ──────────────────────────────────────────────
-        # Flow:
-        #   1. Client upload file lewat  POST /api/upload/  → dapat temp_filename
-        #   2. Client kirim temp_filename ke endpoint ini   → file dipindahkan ke uploads/users/avatars/
-        #
+                
         @cls.router.put("/{user_id}/avatar", status_code=status.HTTP_200_OK)
         def update_avatar(
             user_id: str,

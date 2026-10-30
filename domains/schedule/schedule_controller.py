@@ -258,6 +258,88 @@ class ScheduleController(
                 cls.handle_error(detail=str(error))
 
 
+class JenisJamController(
+    BaseController, prefix="/jenis-jam", tags=["Jenis Jam"]
+):
+    @classmethod
+    def register_routes(cls):
+        @cls.router.get("/", status_code=status.HTTP_200_OK)
+        def get_all(db: Session = Depends(get_db)):
+            try:
+                records = _service.get_all_category_times(db)
+                return cls.handle_success(
+                    data=records, message="Jenis jam retrieved successfully"
+                )
+            except Exception as error:
+                cls.handle_error(detail=str(error))
+
+        @cls.router.get("/{id_jenis_jam}", status_code=status.HTTP_200_OK)
+        def get_by_id(id_jenis_jam: str, db: Session = Depends(get_db)):
+            try:
+                record = _service.get_category_time_by_id(db, id_jenis_jam)
+                if not record:
+                    cls.handle_error(
+                        detail=f"Jenis jam with id {id_jenis_jam} not found",
+                        status_code=status.HTTP_404_NOT_FOUND,
+                    )
+                return cls.handle_success(
+                    data=record, message="Jenis jam retrieved successfully"
+                )
+            except Exception as error:
+                cls.handle_error(detail=str(error))
+
+        @cls.router.post("/", status_code=status.HTTP_201_CREATED)
+        def create(data: CategoryScheduleTimeCreate, db: Session = Depends(get_db)):
+            try:
+                record = _service.create_category_time(db, data)
+                return cls.handle_success(
+                    data=record,
+                    message="Jenis jam created successfully",
+                    status_code=status.HTTP_201_CREATED,
+                )
+            except ValueError as error:
+                cls.handle_error(detail=str(error), status_code=status.HTTP_400_BAD_REQUEST)
+            except Exception as error:
+                cls.handle_error(detail=str(error))
+
+        @cls.router.patch("/{id_jenis_jam}", status_code=status.HTTP_200_OK)
+        def update(
+            id_jenis_jam: str,
+            data: CategoryScheduleTimeUpdate,
+            db: Session = Depends(get_db),
+        ):
+            try:
+                record = _service.update_category_time(db, id_jenis_jam, data)
+                if not record:
+                    cls.handle_error(
+                        detail=f"Jenis jam with id {id_jenis_jam} not found",
+                        status_code=status.HTTP_404_NOT_FOUND,
+                    )
+                return cls.handle_success(
+                    data=record, message="Jenis jam updated successfully"
+                )
+            except ValueError as error:
+                cls.handle_error(detail=str(error), status_code=status.HTTP_400_BAD_REQUEST)
+            except Exception as error:
+                cls.handle_error(detail=str(error))
+
+        @cls.router.delete("/{id_jenis_jam}", status_code=status.HTTP_200_OK)
+        def delete(id_jenis_jam: str, db: Session = Depends(get_db)):
+            try:
+                record = _service.delete_category_time(db, id_jenis_jam)
+                if not record:
+                    cls.handle_error(
+                        detail=f"Jenis jam with id {id_jenis_jam} not found",
+                        status_code=status.HTTP_404_NOT_FOUND,
+                    )
+                return cls.handle_success(
+                    data=record, message="Jenis jam deleted successfully"
+                )
+            except Exception as error:
+                cls.handle_error(detail=str(error))
+
+
 CategoryScheduleTimeController.register_routes()
 ScheduleTimeController.register_routes()
 ScheduleController.register_routes()
+JenisJamController.register_routes()

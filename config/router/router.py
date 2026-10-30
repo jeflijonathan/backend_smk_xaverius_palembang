@@ -47,7 +47,7 @@ class Router:
         self.app.add_exception_handler(
             RateLimitExceeded, _rate_limit_exceeded_handler)
 
-        from fastapi.exceptions import HTTPException
+        from fastapi.exceptions import HTTPException, RequestValidationError
         from fastapi.responses import JSONResponse
 
         @self.app.exception_handler(HTTPException)
@@ -61,6 +61,45 @@ class Router:
                 status_code=exc.status_code,
                 content={"status": "error", "status_code": exc.status_code, "message": exc.detail}
             )
+
+        @self.app.exception_handler(RequestValidationError)
+        async def validation_exception_handler(request, exc):
+            import json
+            body = None
+            try:
+                body = await request.json()
+            except Exception:
+                body = "(could not read body)"
+                
+            print(f"[422 Validation Error] URL: {request.url}")
+            print(f"[422 Validation Error] Body: {json.dumps(body, default=str, ensure_ascii=False)}")
+            print(f"[422 Validation Error] Errors: {exc.errors()}")
+            
+            # Format error details agar seragam dengan BaseController.handle_error
+            formatted_errors = []
+            for error in exc.errors():
+                loc_list = [str(l) for l in error["loc"] if str(l) != "body"]
+                field_str = " -> ".join(loc_list) if loc_list else ""
+                msg = error["msg"]
+                if msg.startswith("Value error, "):
+                    msg = msg[13:]
+                formatted_errors.append({
+                    "field": field_str,
+                    "message": msg,
+                    "type": error["type"]
+                })
+
+            return JSONResponse(
+                status_code=422,
+                content={
+                    "status": "error",
+                    "status_code": 422,
+                    "message": "Validation Error",
+                    "detail": formatted_errors,
+                    "details": formatted_errors
+                }
+            )
+
         self.host = env.beHost
         self.port = int(env.bePort)
         self._setup_routes()
@@ -72,6 +111,9 @@ class Router:
 
         from domains.employee.employee_controller import EmployeeController
         self.app.include_router(EmployeeController.get_router(), prefix="/api")
+
+        from domains.auth.role_controller import RoleController
+        self.app.include_router(RoleController.get_router(), prefix="/api")
 
         from domains.subject.subject_controller import SubjectController
         self.app.include_router(SubjectController.get_router(), prefix="/api")
@@ -98,13 +140,23 @@ class Router:
             CategoryScheduleTimeController,
             ScheduleTimeController,
             ScheduleController,
+            JenisJamController,
         )
         self.app.include_router(CategoryScheduleTimeController.get_router(), prefix="/api")
         self.app.include_router(ScheduleTimeController.get_router(), prefix="/api")
         self.app.include_router(ScheduleController.get_router(), prefix="/api")
+        self.app.include_router(JenisJamController.get_router(), prefix="/api")
 
         from domains.effectiveWeek.effective_week_controller import EffectiveWeekController
         self.app.include_router(EffectiveWeekController.get_router(), prefix="/api")
+
+        from domains.announcement.announcement_controller import AnnouncementController
+        self.app.include_router(AnnouncementController.get_router(), prefix="/api")
+
+        from fastapi.staticfiles import StaticFiles
+        import os
+        os.makedirs("uploads", exist_ok=True)
+        self.app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
         @self.app.get("/")
         def root():
@@ -117,7 +169,7 @@ class Router:
         @self.app.on_event("startup")
         async def startup_event():
             asyncio.create_task(cleanup_temp_files_periodic(
-                interval_seconds=10, max_age_seconds=10))
+                interval_seconds=3600, max_age_seconds=2592000))
 
     def listen(self):
         print(f"[Server] Server running at http://{self.host}:{self.port}")

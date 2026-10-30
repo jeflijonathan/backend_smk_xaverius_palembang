@@ -4,17 +4,29 @@ import math
 
 
 class PaginationParams:
-    """Dependency class untuk query params pagination: ?page=1&limit=10"""
+    """Dependency class untuk query params pagination, search, dan sort."""
     def __init__(
         self,
         page: int = Query(default=1, ge=1, description="Nomor halaman (mulai dari 1)"),
         limit: int = Query(default=10, ge=1, le=100, description="Jumlah data per halaman (max 100)"),
+        value: Optional[str] = Query(default=None, description="Kata kunci pencarian"),
+        sort: Optional[str] = Query(default=None, description="Kolom untuk sorting"),
+        order_by: Optional[str] = Query(default="desc", description="Arah sorting: asc atau desc"),
     ):
         self.page = page
         self.limit = limit
+        self.value = value
+        self.sort = sort
+        self.order_by = order_by
 
     def to_dict(self) -> dict:
-        return {"page": self.page, "limit": self.limit}
+        return {
+            "page": self.page,
+            "limit": self.limit,
+            "value": self.value,
+            "sort": self.sort,
+            "order_by": self.order_by,
+        }
 
 
 class BaseController:

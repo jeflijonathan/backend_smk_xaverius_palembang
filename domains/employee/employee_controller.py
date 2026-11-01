@@ -4,12 +4,14 @@ from config.database.db import get_db
 from domains.employee.employee_service import EmployeeService
 from domains.employee.dto.employee_schema import EmployeeCreate, EmployeeUpdate, EmployeeResponse
 from common.base.baseController import BaseController, PaginationParams
+from domains.auth.auth_middleware import require_roles
 
 class EmployeeController(BaseController, prefix="/employees", tags=["Employees"]):
     _service = EmployeeService()
 
     @classmethod
     def register_routes(cls):
+        cls.router.dependencies.append(Depends(require_roles(["tu", "kurikulum"])))
         @cls.router.get("/", status_code=status.HTTP_200_OK)
         def get_employees(pagination: PaginationParams = Depends(),db: Session = Depends(get_db)):
             try:

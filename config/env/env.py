@@ -28,5 +28,10 @@ class Env:
         self.mailServer = os.getenv("MAIL_SERVER", "localhost")
         self.mailFromName = os.getenv("MAIL_FROM_NAME", "Anti-Spoofing Admin")
 
+        self.jwtSecret = os.getenv("JWT_SECRET", "smk_xaverius_palembang_super_secret_jwt_key_2026")
+        self.jwtAlgorithm = os.getenv("JWT_ALGORITHM", "HS256")
+        self.accessTokenExpireMinutes = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
+        self.refreshTokenExpireDays = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
+
 
 env = Env()

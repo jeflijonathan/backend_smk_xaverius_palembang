@@ -4,6 +4,7 @@ from config.database.db import get_db
 from common.base.baseController import BaseController, PaginationParams
 from common.utils.file_location import move_temp_to_location
 from domains.student.student_service import StudentService
+from domains.auth.auth_middleware import require_roles
 from domains.student.dto.student_dto import (
     CreateStudentDTO,
     UpdateStudentDTO,
@@ -16,6 +17,7 @@ class StudentController(BaseController, prefix="/students", tags=["Students"]):
 
     @classmethod
     def register_routes(cls):
+        cls.router.dependencies.append(Depends(require_roles(["tu", "kurikulum"])))
         @cls.router.get("/", status_code=status.HTTP_200_OK)
         def get_all(
             pagination: PaginationParams = Depends(),

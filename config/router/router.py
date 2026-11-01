@@ -106,6 +106,9 @@ class Router:
 
     def _setup_routes(self):
         # self.app.include_router(UserController.get_router(), prefix="/api")
+        from domains.auth.auth_controller import AuthController
+        self.app.include_router(AuthController.get_router(), prefix="/api")
+
         self.app.include_router(StudentController.get_router(), prefix="/api")
         self.app.include_router(UploadFileController.get_router(), prefix="/api")
 

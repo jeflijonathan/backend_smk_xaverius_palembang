@@ -28,6 +28,7 @@ def get_db():
 
 # Import all models to register them with SQLAlchemy Base.metadata
 import domains.auth.role_model
+import domains.auth.refresh_token_model
 import domains.student.student_model
 import domains.employee.employee_model
 import domains.users.user_model
